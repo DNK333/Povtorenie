@@ -1,0 +1,73 @@
+{% load static %}
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4ef">
+  <title>{{ product.name }} — FORMA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'catalog/site.css' %}">
+</head>
+<body>
+  <div class="announcement">Бесплатная доставка по России при заказе от 20 000 ₽</div>
+  <header class="site-header">
+    <a class="wordmark" href="{% url 'catalog:product' %}" aria-label="FORMA — на главную">FORMA<span>.</span></a>
+    <nav class="main-nav" aria-label="Основная навигация">
+      <a href="#product">Коллекция</a>
+      <a href="#details">О бренде</a>
+    </nav>
+    <a class="bag-link" href="#product" aria-label="Корзина, товаров: {{ cart_count }}">
+      Корзина <span class="bag-count">{{ cart_count }}</span>
+    </a>
+  </header>
+
+  <main id="product" class="page-shell">
+    <div class="breadcrumb"><span>Главная</span><span class="crumb-divider">/</span><span>Часы</span><span class="crumb-divider">/</span><span class="current-crumb">{{ product.name }}</span></div>
+    <section class="product-layout" aria-labelledby="product-title">
+      <div class="product-visual">
+        <span class="edition-label"><span class="edition-dot"></span> Новая коллекция · 2026</span>
+        <img class="product-image" src="{{ product.image_url }}" alt="Наручные часы {{ product.name }}" fetchpriority="high">
+        <span class="image-index">01 <span>/</span> 01</span>
+      </div>
+
+      <div class="product-info">
+        <p class="eyebrow">FORMA OBJECTS <span>—</span> F-01</p>
+        <h1 id="product-title">{{ product.name }}</h1>
+        <p class="subtitle">{{ product.subtitle }}</p>
+        <div class="rating" aria-label="Оценка 4,9 из 5">
+          <span class="stars" aria-hidden="true">★★★★★</span>
+          <span>4,9</span>
+          <span class="rating-divider">·</span>
+          <a href="#details">12 отзывов</a>
+        </div>
+        <div class="rule"></div>
+        <p class="description">{{ product.description|linebreaksbr }}</p>
+
+        <div class="spec-list" id="details">
+          <div class="spec-row"><span>Механизм</span><span>Автоматический, 42 часа</span></div>
+          <div class="spec-row"><span>Корпус</span><span>Нержавеющая сталь · 40 мм</span></div>
+          <div class="spec-row"><span>Стекло</span><span>Сапфировое</span></div>
+        </div>
+
+        <div class="purchase-row">
+          <span class="price">{{ product.price|floatformat:0 }} <span>₽</span></span>
+          <span class="availability"><span class="stock-dot"></span> В наличии</span>
+        </div>
+        <form method="post" action="{% url 'catalog:add_to_cart' %}">
+          {% csrf_token %}
+          <button class="add-button" type="submit">
+            <span>Добавить в корзину</span>
+            <span class="button-arrow" aria-hidden="true">↗</span>
+          </button>
+        </form>
+        {% if cart_count %}<p class="cart-feedback" role="status">В корзине: {{ cart_count }} шт.</p>{% endif %}
+        <p class="delivery-note"><span aria-hidden="true">↗</span> Доставка и возврат за наш счёт · Гарантия 2 года</p>
+      </div>
+    </section>
+    <footer class="page-footer"><span>FORMA — предметы вне времени</span><span>Сделано с вниманием к деталям</span></footer>
+  </main>
+</body>
+</html>
